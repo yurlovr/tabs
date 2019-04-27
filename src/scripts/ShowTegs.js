@@ -6,22 +6,16 @@ export default class ShowTegs extends Component {
     super(props);
 
     this.renderTegs = this.renderTegs.bind(this);
-    this.onClickTeg = this.onClickTeg.bind(this);
   }
-
-  onClickTeg(event) {
-    console.log(event.target.id);
-  }
-
   renderTegs() {
     return this.props.tegs.map(teg => {
-      console.log("tut");
       return (
         <li key={teg.name}>
           <TegItem
             name={teg.name}
             color={teg.color}
-            callback={this.onClickTeg}
+            callback={this.props.show ? ()=>{} : this.props.onClick}
+            // selectedTegs={this.props.selectedTegs}
           />
         </li>
       );

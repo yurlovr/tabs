@@ -1,9 +1,10 @@
 import React from "react";
-
+// {props.isRequired ? <span className="required"/> : null}
 const Input = (props) => {
     return (
         <div className="form-group">
-            <label htmlFor={props.name} className="form-label">{props.title}</label>
+
+            <label htmlFor={props.name} className={`form-label ${props.isRequired ? "required" : ""} `}>{props.title}</label>
             <input
                 className="form-input"
                 id={props.name}

@@ -4,7 +4,8 @@ const Button = props => {
   return (
     <button
       onClick={(event) => props.onClick(event)}
-      className={`${props.className ? props.className : ""} ${props.disabled ? "disabled" :""}`}
+      className={`${props.className ? props.className : ""}`}
+      disabled={props.disabled}
     >
       {props.label}
     </button>

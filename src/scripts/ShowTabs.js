@@ -5,15 +5,14 @@ export default class ShowTabs extends Component {
   constructor(props) {
     super(props);
 
-    console.log(this.props);
     this.renderTabs = this.renderTabs.bind(this);
   }
 
   renderTabs() {
     return this.props.tabs.map(tab => {
       return (
-        <li className="col-md-5 show-tabs-item" key={tab.id}>
-          <ShowTabsItem tab={tab} />
+        <li className="row show-tabs-item" key={tab.id}>
+          <ShowTabsItem tab={tab} deleteTab={this.props.deleteTab} changeTab={this.props.changeTab} />
         </li>
       );
     });
@@ -21,7 +20,7 @@ export default class ShowTabs extends Component {
 
   render() {
     return (
-      <ul className="show-tabs-listTabs">
+      <ul className="show-tabs-listTabs container">
         {this.renderTabs()}
       </ul>
     );

@@ -7,8 +7,9 @@ body {
   background-color: aqua;
   border-radius: 20px;
   min-height: 54em;
+  border: 1px solid #068d8d;
 }
-ul{
+ul {
   padding: 0;
   margin: 0;
   list-style: none;
@@ -33,17 +34,17 @@ ul{
     padding-top: 15px;
     text-align: center;
   }
-  &_countTabs{
+  &_countTabs {
     display: block;
     margin-top: 15px;
-    color:#808080;
+    color: #808080;
     font-size: 16px;
     font-weight: 500;
   }
 
   &_input-section {
     margin-bottom: 30px;
-    & .form-group{
+    & .form-group {
       display: flex;
     }
     & .form-input {
@@ -54,9 +55,9 @@ ul{
       padding-bottom: 5px;
       padding-left: 12px;
     }
-
   }
-  &_tegs{
+  &_tegs {
+    position: relative;
     display: flex;
     margin-left: auto;
     margin-right: auto;
@@ -65,13 +66,62 @@ ul{
     padding-top: 10px;
     padding-bottom: 10px;
     width: 68%;
-    border: 1px solid rgba(128,128,128, 0.5);
+    border: 1px solid rgba(128, 128, 128, 0.5);
     border-radius: 5px;
     & > ul {
       display: flex;
       flex-wrap: wrap;
-      & > li{
+      & > li {
         margin-right: 10px;
+        margin-bottom: 10px;
+
+        & > span.main_teg {
+          cursor: pointer;
+          padding-left: 5px;
+          padding-right: 5px;
+          padding-bottom: 3px;
+          border-radius: 6px;
+          opacity: 0.75;
+          color: white;
+          box-shadow: 1px 1px 1px 1px grey;
+          &:hover {
+            opacity: 1;
+          }
+          &:active {
+            box-shadow: none;
+          }
+          &.-active {
+            box-shadow: 0 0 5px 4px #ffeb3b;
+            opacity: 1;
+          }
+        }
+      }
+    }
+    &_close {
+      position: absolute;
+      right: -25px;
+      top: 0;
+      width: 25px;
+      height: 25px;
+      opacity: 0.5;
+      cursor: pointer;
+      &:hover {
+        opacity: 1;
+      }
+      &:before,
+      &:after {
+        position: absolute;
+        left: 15px;
+        content: " ";
+        height: 20px;
+        width: 2px;
+        background-color: #0000008a;
+      }
+      &:before {
+        transform: rotate(45deg);
+      }
+      &:after {
+        transform: rotate(-45deg);
       }
     }
   }
@@ -96,7 +146,7 @@ ul{
   }
 
   & .form-input {
-    width: 70%;
+    width: 100%;
     border-radius: 5px;
     padding-top: 5px;
     padding-bottom: 5px;
@@ -104,15 +154,12 @@ ul{
   }
 
   & .form-control {
-    width: 70%;
+    width: 100%;
     border-radius: 5px;
   }
   &_button-section {
     display: flex;
     justify-content: space-between;
-    & > button:last-child {
-      margin-right: 30%;
-    }
   }
 }
 
@@ -123,6 +170,9 @@ ul{
   padding-left: 30px;
   padding-right: 30px;
   margin-bottom: 100px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 
   & > h3 {
     margin-top: 20px;
@@ -130,13 +180,12 @@ ul{
     margin-bottom: 20px;
   }
 
-
   &_buttons {
     display: flex;
     justify-content: flex-end;
     margin-bottom: 10px;
     & > button:first-child {
-     margin-right: 20px;
+      margin-right: 20px;
     }
   }
 
@@ -146,10 +195,11 @@ ul{
     flex-wrap: wrap;
   }
 
-  &-item{
+  &-item {
     margin: 0 auto;
-    &:last-child:nth-child(2n+1){
-      margin-left: 45px;
+    flex-basis: 400px;
+    &:nth-child(2n + 1) {
+      margin-left: 6%;
     }
   }
 
@@ -162,13 +212,13 @@ ul{
     text-decoration: none;
     color: #35a6a6;
     &::after {
-      content: ">>";
+      content: "»";
       display: inline-block;
       margin-left: 10px;
     }
     &:hover {
       text-decoration: none;
-      color:#b02996;
+      color: #b02996;
       &::after {
         transform: translateX(20px);
         transition: transform 1s ease-out;
@@ -179,14 +229,147 @@ ul{
     color: #808080;
     font-size: 12px;
     text-align: end;
+    margin-top: auto;
   }
 
-  &_description{
+  &_description {
     padding-left: 15px;
     padding-top: 15px;
     padding-bottom: 15px;
+    min-height: 45px;
     border: 1px solid rgba(128, 128, 128, 0.5);
     border-radius: 15px;
-    box-shadow: 1px 1px rgba(128,128,128, 0.5);
+    box-shadow: 1px 1px rgba(128, 128, 128, 0.5);
+  }
+
+  &_tegs {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    min-height: 45px;
+    & > ul {
+      display: flex;
+      flex-wrap: wrap;
+      & > li {
+        margin-right: 10px;
+        margin-bottom: 10px;
+        & > span.main_teg {
+          padding-left: 5px;
+          padding-right: 5px;
+          padding-bottom: 3px;
+          border-radius: 6px;
+          color: white;
+        }
+      }
+    }
   }
 }
+
+.wrapper {
+  justify-content: center;
+}
+
+.scroll {
+  position: fixed;
+  left: 18%;
+  top: 50%;
+  width: 25px;
+  height: 25px;
+  opacity: 0.5;
+  cursor: pointer;
+  &:hover {
+    opacity: 1;
+  }
+  &:before {
+    position: absolute;
+    left: 10px;
+    content: " ";
+    height: 20px;
+    width: 2px;
+    background-color: #0000008a;
+  }
+  &:after {
+    position: absolute;
+    left: 23px;
+    content: " ";
+    height: 20px;
+    width: 2px;
+    background-color: #0000008a;
+  }
+  &:before {
+    transform: rotate(45deg);
+  }
+  &:after {
+    transform: rotate(-45deg);
+  }
+}
+
+.btn:disabled {
+  cursor: no-drop;
+}
+
+.required {
+  &::after {
+    position: relative;
+    left: 5px;
+    content: "*";
+    width: 2px;
+    color: #ff0000;
+  }
+}
+span.required {
+  display: block;
+  font-size: 14px;
+  margin-top: 10px;
+  color: #808080;
+  &::before {
+    position: relative;
+    left: 0;
+    content: "*";
+    width: 2px;
+    color: #ff0000;
+  }
+  &::after{
+    display: none;
+  }
+}
+
+.modal {
+  display: block;
+  background: rgba(0, 0, 0, .5);
+  z-index: 100;
+  &-header {
+    justify-content: center;
+    & .close {
+      margin-left: 0;
+      position: absolute;
+      right: 4%;
+    }
+  }
+  &-section {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    border: 1px solid #808080;
+    border-radius: 10px;
+    &-header{
+      margin-bottom: 15px;
+      font-style: italic;
+      font-weight: 700;
+      color: #35a6a6;
+    }
+    & h4 ~ .show-tabs_description:not(.show-tabs_tegs) {
+      position: relative;
+      max-height: 140px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
+    & .show-tabs_date {
+      margin-bottom: auto;
+    }
+  }
+  &-footer{
+    justify-content: space-between;
+  }
+}
+
