@@ -4,7 +4,6 @@ export default function SetData(id, data) {
         localStorage.setItem(id, stringData);
         return true;
     } catch (error) {
-        console.log(error);
         return false;
     }
 }

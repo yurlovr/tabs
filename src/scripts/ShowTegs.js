@@ -1,7 +1,7 @@
-import React, { Component } from "react";
-import TegItem from "./components/TegItem";
+import React, { PureComponent } from "react";
+import TegItem from "./components/Tegs/TegItem";
 
-export default class ShowTegs extends Component {
+export default class ShowTegs extends PureComponent {
   constructor(props) {
     super(props);
 
@@ -11,11 +11,13 @@ export default class ShowTegs extends Component {
     return this.props.tegs.map(teg => {
       return (
         <li key={teg.name}>
+
           <TegItem
             name={teg.name}
             color={teg.color}
             callback={this.props.show ? () => {} : this.props.onClick}
           />
+
         </li>
       );
     });

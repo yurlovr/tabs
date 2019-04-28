@@ -9,6 +9,7 @@ const Input = props => {
       >
         {props.title}
       </label>
+
       {props.clearInput && (
         <span
           className="main_tegs_close -input"
@@ -16,8 +17,9 @@ const Input = props => {
           title="Очистить"
         />
       )}
+
       <input
-        className="form-input"
+        className={`form-input ${props.valid ? "" : "input_not_valid" }`}
         id={props.name}
         name={props.name}
         type={props.type}

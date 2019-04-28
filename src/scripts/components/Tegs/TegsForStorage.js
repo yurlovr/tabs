@@ -32,12 +32,14 @@ export default function TegsForStorage(newTegs, arrayFormStorage, tegs) {
   );
 
   // получили новый массив объектов тегов для localStorage  с уникальными значениями
+
   newElement.forEach(item => {
     let object = {};
     object.name = item;
     object.color = colorTeg();
     arrayFormStorage.push(object);
   });
+
   let array = newTegsForTab(newTegs, arrayFormStorage );
 
   return {arrayFormStorage, array}
@@ -47,13 +49,16 @@ function newTegsForTab(newTegs, arrayFormStorage) {
   let array = newTegs.map(teg => {
     return Object.assign({},arrayFormStorage.find(elem => elem.name === teg.toLowerCase()))
   });
+
   array.map(item => {return (
    newTegs.forEach(teg=>{if(teg.toLowerCase() === item.name){return item.name = teg}})
   )});
+
  return array;
 }
 
 function colorTeg() {
+
   return (
     "#" +
     Math.random()

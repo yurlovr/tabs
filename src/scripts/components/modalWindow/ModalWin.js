@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import TabItem from "./TabItem";
+import TabItem from "../Tabs/TabItem";
 
 export default class ModalWin extends Component {
   constructor(props) {

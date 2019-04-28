@@ -3,7 +3,7 @@ import React from "react";
 const Button = props => {
   return (
     <button
-      onClick={(event) => props.onClick(event)}
+      onClick={event => props.onClick(event)}
       className={`${props.className ? props.className : ""}`}
       disabled={props.disabled}
     >

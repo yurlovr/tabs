@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import DeclensionWorld from "./DeclensionWorld";
+import DeclensionWorld from "./components/helperFunc/DeclensionWorld";
 
 export default class RenderHeader extends Component {
   render() {
@@ -9,8 +9,8 @@ export default class RenderHeader extends Component {
           Главная
           <span className="main_countTabs">
             У Вас
-            {!!this.props.countTabs ? this.props.countTabs + " " : " нет "}
-            {DeclensionWorld(this.props.countTabs)}.
+            {!!this.props.countTabs ? " " + this.props.countTabs + " " : " нет "}
+              {DeclensionWorld(this.props.countTabs)}.
           </span>
         </h3>
       );

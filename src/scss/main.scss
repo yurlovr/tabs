@@ -1,16 +1,26 @@
 body {
   background-color: beige;
   margin: 0 auto;
+  min-width: 650px;
 }
 
+
+
 #root {
+  position: relative;
   margin-top: 15px;
   background-color: aqua;
   border-radius: 20px;
   min-height: 54em;
   border: 1px solid #068d8d;
   tab-index: 0;
+  min-width: 650px;
 }
+
+.col-md-12 {
+  position: static;;
+}
+
 ul {
   padding: 0;
   margin: 0;
@@ -297,8 +307,8 @@ ul {
 
 .scroll {
   position: fixed;
-  left: 18%;
-  top: 50%;
+  left: 3%;
+  top: 30%;
   width: 25px;
   height: 25px;
   opacity: 0.5;
@@ -398,4 +408,9 @@ span.required {
   &-footer {
     justify-content: space-between;
   }
+}
+
+.input_not_valid {
+  border-color: #ff0000;
+  box-shadow: 0 2px 13px 1px #ff0000;
 }

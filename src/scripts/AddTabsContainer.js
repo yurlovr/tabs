@@ -1,15 +1,15 @@
 import React, { Component } from "react";
-import Input from "./components/Input";
-import Button from "./components/Button";
-import TextArea from "./components/TextArea";
-import DateAddTabs from "./components/DateAddTabs";
+import Input from "./components/form/Input";
+import Button from "./components/form/Button";
+import TextArea from "./components/form/TextArea";
+import DateAddTabs from "./components/helperFunc/DateAddTabs";
 import SetData from "./data/SetData";
 import { tabsId, tegsId } from "./MainPage";
-import TegsForStorage from "./components/TegsForStorage";
-import DeleteTabFromStorage from "./components/DeleteTabFromStorage";
-import ScrollToTop from "./components/ScrollToTop";
-import CheckURL from "./components/CheckURL";
-import ModalWin from "./components/ModalWin";
+import TegsForStorage from "./components/Tegs/TegsForStorage";
+import DeleteTabFromStorage from "./components/Tabs/DeleteTabFromStorage";
+import ScrollToTop from "./components/helperFunc/ScrollToTop";
+import CheckURL from "./components/helperFunc/CheckURL";
+import ModalWin from "./components/modalWindow/ModalWin";
 
 let tabsObject = {};
 
@@ -28,7 +28,9 @@ class AddTabsContainer extends Component {
       tabsFromStorage: this.props.tabs,
       tegsFromStorage: this.props.tegs,
       modalSave: false,
-      newTegs: []
+      newTegs: [],
+      validLinlTab: true,
+      validNameTab: true,
     };
 
     this.addNameTabs = this.addNameTabs.bind(this);
@@ -43,6 +45,7 @@ class AddTabsContainer extends Component {
     this.delTegsTabs = this.delTegsTabs.bind(this);
     this.delNameTabs = this.delNameTabs.bind(this);
     this.delLinkTabs = this.delLinkTabs.bind(this);
+    this.validLink = this.validLink.bind(this);
   }
 
   addNameTabs(event) {
@@ -67,6 +70,7 @@ class AddTabsContainer extends Component {
   }
 
   addLinkTabs(event) {
+    this.validLink(CheckURL(event.target.value));
     this.setState(
       {
         linkTabs: event.target.value,
@@ -81,6 +85,13 @@ class AddTabsContainer extends Component {
   delLinkTabs() {
     this.setState({linkTabs: ""}, () => this.disabledButton());
 }
+  validLink(bool){
+    if(bool) {
+      this.setState({validLinlTab: bool})
+    } else {
+      this.setState({validLinlTab: bool, disabled: true})
+    }
+  }
 
   addTegsTabs(event) {
     this.setState({ tegsTabs: event.target.value });
@@ -113,7 +124,6 @@ class AddTabsContainer extends Component {
     );
     tabsObject.tegs = objectTegs.array;
     this.setState({ modalSave: true, newTegs: objectTegs.arrayFormStorage });
-    // this.saveTab(objectTegs.arrayFormStorage);
   }
 
   saveTab() {
@@ -121,8 +131,7 @@ class AddTabsContainer extends Component {
       {
         modalSave: false,
         tabsFromStorage: this.props.change
-          ? DeleteTabFromStorage(
-              // удаляем дублирующиеся закладки
+          ? DeleteTabFromStorage(  // удаляем дублирующиеся закладки
               this.state.tabsFromStorage,
               this.props.tab.id
             ).concat(tabsObject)
@@ -142,7 +151,7 @@ class AddTabsContainer extends Component {
   }
 
   disabledButton() {
-    if (this.state.nameTabs.trim() && this.state.linkTabs.trim()) {
+    if (this.state.nameTabs.trim() && this.state.linkTabs.trim() && this.state.validLinlTab) {
       this.setState({ disabled: false });
     } else {
       this.setState({ disabled: true });
@@ -152,6 +161,7 @@ class AddTabsContainer extends Component {
   renderButtonBlock() {
     return (
       <div className="addTabs_button-section">
+
         <Button
           label={"Сохранить"}
           onClick={this.prepaerToSaveTab}
@@ -171,6 +181,7 @@ class AddTabsContainer extends Component {
   render() {
     return (
       <React.Fragment>
+
         {this.state.modalSave && (
           <ModalWin
             title="Сохранить Закладку?"
@@ -185,18 +196,19 @@ class AddTabsContainer extends Component {
 
         <div className="addTabs">
           <Input
-            title="Ссылка на сайт"
+            title="Вставьте ссылку на сайт ( вида https://www.google.com)"
             name="linkTabs"
             type="text"
             value={this.state.linkTabs}
-            placeholder="Вставьте ссылку на сайт"
+            placeholder="https://www.google.com"
             onChange={this.addLinkTabs}
             clearInput={this.delLinkTabs}
             isRequired={true}
+            valid={this.state.validLinlTab}
           />
 
           <Input
-            title="Название Закладки"
+            title="Введите название Закладки"
             name="nameTabs"
             type="text"
             value={this.state.nameTabs}
@@ -204,20 +216,22 @@ class AddTabsContainer extends Component {
             onChange={this.addNameTabs}
             clearInput={this.delNameTabs}
             isRequired={true}
+            valid={true}
           />
 
           <Input
-            title="Теги"
+            title="Введите теги для закладки через пробел"
             name="tegsTabs"
             type="text"
             value={this.state.tegsTabs}
             placeholder="Введите Теги через пробел"
             onChange={this.addTegsTabs}
             clearInput={this.delTegsTabs}
+            valid={true}
           />
 
           <TextArea
-            title={"Описание закладки"}
+            title={"Введите описание закладки"}
             rows={10}
             value={this.state.descriptionTabs}
             name={"description"}

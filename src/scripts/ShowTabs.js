@@ -1,7 +1,7 @@
-import React, { Component } from "react";
-import ShowTabsItem from "./ShowTabsItem";
+import React, { PureComponent } from "react";
+import ShowTabsItem from "./components/Tabs/ShowTabsItem";
 
-export default class ShowTabs extends Component {
+export default class ShowTabs extends PureComponent {
   constructor(props) {
     super(props);
 
@@ -12,11 +12,13 @@ export default class ShowTabs extends Component {
     return this.props.tabs.map(tab => {
       return (
         <li className="row show-tabs-item" key={tab.id} tabIndex="0">
+
           <ShowTabsItem
             tab={tab}
             deleteTab={this.props.deleteTab}
             changeTab={this.props.changeTab}
           />
+
         </li>
       );
     });

@@ -1,5 +1,5 @@
 import React from "react";
-import ShowTegs from "../ShowTegs";
+import ShowTegs from "../../ShowTegs";
 
 export default function TabItem(props) {
   return (
@@ -7,17 +7,21 @@ export default function TabItem(props) {
       <div>
         <h4>Теги:</h4>
         <div className="show-tabs_description show-tabs_tegs">
+
           <ShowTegs tegs={props.tab.tegs} show={true} />
+
         </div>
       </div>
       <div>
         <h4>Описание:</h4>
         <p className="show-tabs_description">
+
           {props.modal
             ? props.tab.descriptionTabs.length > 235
               ? props.tab.descriptionTabs.slice(0, 230) + " ..."
               : props.tab.descriptionTabs
             : props.tab.descriptionTabs}
+
         </p>
       </div>
       <p className="show-tabs_date">

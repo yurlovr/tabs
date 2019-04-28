@@ -3,6 +3,7 @@ import React from "react";
 const TextArea = props => (
   <div className="form-group">
     <label className="form-label">{props.title}</label>
+
     {props.delDescriptionTabs && (
       <span
         className="main_tegs_close"
@@ -10,6 +11,7 @@ const TextArea = props => (
         title="Очистить"
       />
     )}
+
     <textarea
       className="form-control"
       name={props.name}
