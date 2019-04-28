@@ -23,15 +23,13 @@ class AddTabsContainer extends Component {
       descriptionTabs: !this.props.change ? "" : this.props.tab.descriptionTabs,
       linkTabs: !this.props.change ? "" : this.props.tab.linkTabs,
       tegsTabs: !this.props.change
-        ? ""
+        ? []
         : this.props.tab.tegs.map(teg => teg.name.replace("#", "")).join(" "),
       tabsFromStorage: this.props.tabs,
       tegsFromStorage: this.props.tegs,
-        modalSave: false,
-        newTegs: [],
+      modalSave: false,
+      newTegs: []
     };
-
-
 
     this.addNameTabs = this.addNameTabs.bind(this);
     this.addDescriptionTabs = this.addDescriptionTabs.bind(this);
@@ -41,12 +39,20 @@ class AddTabsContainer extends Component {
     this.renderButtonBlock = this.renderButtonBlock.bind(this);
     this.addTegsTabs = this.addTegsTabs.bind(this);
     this.saveTab = this.saveTab.bind(this);
-
+    this.delDescriptionTabs = this.delDescriptionTabs.bind(this);
+    this.delTegsTabs = this.delTegsTabs.bind(this);
+    this.delNameTabs = this.delNameTabs.bind(this);
+    this.delLinkTabs = this.delLinkTabs.bind(this);
   }
 
   addNameTabs(event) {
     this.setState({ nameTabs: event.target.value }, () =>
       this.disabledButton()
+    );
+  }
+  delNameTabs(){
+    this.setState({ nameTabs: "" }, () =>
+        this.disabledButton()
     );
   }
 
@@ -56,55 +62,67 @@ class AddTabsContainer extends Component {
     );
   }
 
+  delDescriptionTabs(){
+    this.setState({descriptionTabs: "",})
+  }
+
   addLinkTabs(event) {
     this.setState(
       {
         linkTabs: event.target.value,
-        nameTabs: CheckURL(event.target.value) ? new URL(event.target.value).hostname : event.target.value
+        nameTabs: CheckURL(event.target.value)
+          ? new URL(event.target.value).hostname
+          : event.target.value
       },
       () => this.disabledButton()
     );
   }
 
+  delLinkTabs() {
+    this.setState({linkTabs: ""}, () => this.disabledButton());
+}
+
   addTegsTabs(event) {
-    this.setState({ tegsTabs: event.target.value }, () =>
-      this.disabledButton()
-    );
+    this.setState({ tegsTabs: event.target.value });
   }
 
-    prepaerToSaveTab (event) {
-        event.preventDefault();
-        let arrayTegs = this.state.tegsTabs
-            .trim()
-            .split(" ")
-            .map(i => {
-                return i[0] === "#" ? i : "#" + i;
-            });
-        tabsObject = {
-            id: !this.props.change ? Math.random() : this.props.tab.id,
-            nameTabs: this.state.nameTabs,
-            tegs: TegsForStorage(arrayTegs, arrayTegs, true), // удаляет дублирующиеся теги
-            linkTabs: this.state.linkTabs,
-            descriptionTabs: this.state.descriptionTabs,
-            date: DateAddTabs()
-        };
-        let objectTegs = TegsForStorage(   // создаем массив объектов тегов (уникальных) для записи в localStorage
-            tabsObject.tegs,
-            this.state.tegsFromStorage
-        );
-        tabsObject.tegs = objectTegs.array;
-        this.setState({modalSave:true, newTegs : objectTegs.arrayFormStorage});
-        // this.saveTab(objectTegs.arrayFormStorage);
+  delTegsTabs(){
+    this.setState({ tegsTabs: [] });
+  }
 
-    }
+  prepaerToSaveTab(event) {
+    event.preventDefault();
+    let arrayTegs = this.state.tegsTabs
+      .trim()
+      .split(" ")
+      .map(i => {
+        return i[0] === "#" ? i : "#" + i;
+      });
+    tabsObject = {
+      id: !this.props.change ? Math.random() : this.props.tab.id,
+      nameTabs: this.state.nameTabs,
+      tegs: TegsForStorage(arrayTegs, arrayTegs, true), // удаляет дублирующиеся теги
+      linkTabs: this.state.linkTabs,
+      descriptionTabs: this.state.descriptionTabs,
+      date: DateAddTabs()
+    };
+    let objectTegs = TegsForStorage(
+      // создаем массив объектов тегов (уникальных) для записи в localStorage
+      tabsObject.tegs,
+      this.state.tegsFromStorage
+    );
+    tabsObject.tegs = objectTegs.array;
+    this.setState({ modalSave: true, newTegs: objectTegs.arrayFormStorage });
+    // this.saveTab(objectTegs.arrayFormStorage);
+  }
 
-    saveTab(){
-
+  saveTab() {
     this.setState(
       {
-          modalSave:false,
+        modalSave: false,
         tabsFromStorage: this.props.change
-          ? DeleteTabFromStorage(      // удаляем дублирующиеся закладки
+          ? DeleteTabFromStorage(
+              // удаляем дублирующиеся закладки
               this.state.tabsFromStorage,
               this.props.tab.id
             ).concat(tabsObject)
@@ -113,7 +131,7 @@ class AddTabsContainer extends Component {
         nameTabs: "",
         descriptionTabs: "",
         linkTabs: "",
-        tegsTabs: "",
+        tegsTabs: ""
       },
       () => {
         SetData(tabsId, this.state.tabsFromStorage);
@@ -124,10 +142,7 @@ class AddTabsContainer extends Component {
   }
 
   disabledButton() {
-    if (
-      this.state.nameTabs.trim() &&
-      this.state.linkTabs.trim()
-    ) {
+    if (this.state.nameTabs.trim() && this.state.linkTabs.trim()) {
       this.setState({ disabled: false });
     } else {
       this.setState({ disabled: true });
@@ -155,58 +170,64 @@ class AddTabsContainer extends Component {
 
   render() {
     return (
-        <React.Fragment>
-        {this.state.modalSave &&
-                <ModalWin title="Сохранить Закладку?"
-                          tab={tabsObject}
-                          okButton={this.saveTab}
-                          cancelButton={() => this.setState({modalSave:false})}
-                          cancelButtonTitle="Отменить"
-                          okButtonTitle="Сохранить"
-                          delete={false}
-                />}
+      <React.Fragment>
+        {this.state.modalSave && (
+          <ModalWin
+            title="Сохранить Закладку?"
+            tab={tabsObject}
+            okButton={this.saveTab}
+            cancelButton={() => this.setState({ modalSave: false })}
+            cancelButtonTitle="Отменить"
+            okButtonTitle="Сохранить"
+            delete={false}
+          />
+        )}
 
-      <div className="addTabs">
-        <Input
-          title="Ссылка на сайт"
-          name="linkTabs"
-          type="text"
-          value={this.state.linkTabs}
-          placeholder="Вставьте ссылку на сайт"
-          onChange={this.addLinkTabs}
-          isRequired={true}
-        />
+        <div className="addTabs">
+          <Input
+            title="Ссылка на сайт"
+            name="linkTabs"
+            type="text"
+            value={this.state.linkTabs}
+            placeholder="Вставьте ссылку на сайт"
+            onChange={this.addLinkTabs}
+            clearInput={this.delLinkTabs}
+            isRequired={true}
+          />
 
-        <Input
-          title="Название Закладки"
-          name="nameTabs"
-          type="text"
-          value={this.state.nameTabs}
-          placeholder="Введите название закладки"
-          onChange={this.addNameTabs}
-          isRequired={true}
-        />
+          <Input
+            title="Название Закладки"
+            name="nameTabs"
+            type="text"
+            value={this.state.nameTabs}
+            placeholder="Введите название закладки"
+            onChange={this.addNameTabs}
+            clearInput={this.delNameTabs}
+            isRequired={true}
+          />
 
-        <Input
-          title="Теги"
-          name="tegsTabs"
-          type="text"
-          value={this.state.tegsTabs}
-          placeholder="Введите Теги через пробел"
-          onChange={this.addTegsTabs}
-        />
+          <Input
+            title="Теги"
+            name="tegsTabs"
+            type="text"
+            value={this.state.tegsTabs}
+            placeholder="Введите Теги через пробел"
+            onChange={this.addTegsTabs}
+            clearInput={this.delTegsTabs}
+          />
 
-        <TextArea
-          title={"Описание закладки"}
-          rows={10}
-          value={this.state.descriptionTabs}
-          name={"description"}
-          handleChange={this.addDescriptionTabs}
-          placeholder={"Описание закладки"}
-        />
-        {this.renderButtonBlock()}
-      </div>
-        </React.Fragment>
+          <TextArea
+            title={"Описание закладки"}
+            rows={10}
+            value={this.state.descriptionTabs}
+            name={"description"}
+            handleChange={this.addDescriptionTabs}
+            placeholder={"Описание закладки"}
+            clearArea={this.delDescriptionTabs}
+          />
+          {this.renderButtonBlock()}
+        </div>
+      </React.Fragment>
     );
   }
 }

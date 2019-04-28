@@ -14,8 +14,7 @@ export default class ShowTegs extends Component {
           <TegItem
             name={teg.name}
             color={teg.color}
-            callback={this.props.show ? ()=>{} : this.props.onClick}
-            // selectedTegs={this.props.selectedTegs}
+            callback={this.props.show ? () => {} : this.props.onClick}
           />
         </li>
       );

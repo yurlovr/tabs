@@ -30,10 +30,9 @@ export default class ModalWin extends Component {
             <div className="modal-body">
               <section className="modal-section">
                 <h3 className="modal-section-header">
-                    {this.props.tab.nameTabs}
+                  {this.props.tab.nameTabs}
                 </h3>
-                <TabItem tab={this.props.tab}
-                         modal={true} />
+                <TabItem tab={this.props.tab} modal={true} />
               </section>
             </div>
             <div className="modal-footer">
@@ -46,7 +45,9 @@ export default class ModalWin extends Component {
               </button>
               <button
                 type="button"
-                className={`btn ${this.props.delete ? "btn-warning" : "btn-primary"}`}
+                className={`btn ${
+                  this.props.delete ? "btn-warning" : "btn-primary"
+                }`}
                 onClick={this.okButtonClick}
               >
                 {this.props.okButtonTitle}

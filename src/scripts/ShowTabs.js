@@ -11,8 +11,12 @@ export default class ShowTabs extends Component {
   renderTabs() {
     return this.props.tabs.map(tab => {
       return (
-        <li className="row show-tabs-item" key={tab.id}>
-          <ShowTabsItem tab={tab} deleteTab={this.props.deleteTab} changeTab={this.props.changeTab} />
+        <li className="row show-tabs-item" key={tab.id} tabIndex="0">
+          <ShowTabsItem
+            tab={tab}
+            deleteTab={this.props.deleteTab}
+            changeTab={this.props.changeTab}
+          />
         </li>
       );
     });
@@ -20,9 +24,7 @@ export default class ShowTabs extends Component {
 
   render() {
     return (
-      <ul className="show-tabs-listTabs container">
-        {this.renderTabs()}
-      </ul>
+      <ul className="show-tabs-listTabs container">{this.renderTabs()}</ul>
     );
   }
 }

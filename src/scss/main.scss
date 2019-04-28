@@ -4,10 +4,12 @@ body {
 }
 
 #root {
+  margin-top: 15px;
   background-color: aqua;
   border-radius: 20px;
   min-height: 54em;
   border: 1px solid #068d8d;
+  tab-index: 0;
 }
 ul {
   padding: 0;
@@ -31,8 +33,23 @@ ul {
     }
   }
   &_header {
+    position: relative;
     padding-top: 15px;
     text-align: center;
+    &_before {
+      position: absolute;
+      left: 0;
+      top: 24%;
+      opacity: 0.7;
+      cursor: pointer;
+      &:hover {
+        opacity: 1;
+        color: #000000;
+      }
+      &::before {
+        display: none;
+      }
+    }
   }
   &_countTabs {
     display: block;
@@ -103,7 +120,7 @@ ul {
       top: 0;
       width: 25px;
       height: 25px;
-      opacity: 0.5;
+      opacity: 0.2;
       cursor: pointer;
       &:hover {
         opacity: 1;
@@ -139,10 +156,20 @@ ul {
 
 .addTabs {
   margin-top: 30px;
+  & .form-group {
+    position: relative;
+  }
   & .form-label {
     font-size: 16px;
     display: block;
     font-weight: 700;
+    & ~ span.main_tegs_close {
+      top: 14%;
+      right: 2%;
+      &.-input {
+        top: 58%;
+      }
+    }
   }
 
   & .form-input {
@@ -328,14 +355,14 @@ span.required {
     width: 2px;
     color: #ff0000;
   }
-  &::after{
+  &::after {
     display: none;
   }
 }
 
 .modal {
   display: block;
-  background: rgba(0, 0, 0, .5);
+  background: rgba(0, 0, 0, 0.5);
   z-index: 100;
   &-header {
     justify-content: center;
@@ -351,7 +378,7 @@ span.required {
     padding: 10px;
     border: 1px solid #808080;
     border-radius: 10px;
-    &-header{
+    &-header {
       margin-bottom: 15px;
       font-style: italic;
       font-weight: 700;
@@ -368,8 +395,7 @@ span.required {
       margin-bottom: auto;
     }
   }
-  &-footer{
+  &-footer {
     justify-content: space-between;
   }
 }
-

@@ -5,10 +5,8 @@ import GetData from "./data/GetData";
 import ShowTabs from "./ShowTabs";
 import Input from "./components/Input";
 import ShowTegs from "./ShowTegs";
-import ArrayForSort from "./components/ArrayForSort";
 import DeleteTabFromStorage from "./components/DeleteTabFromStorage";
 import ChangeTabFromStorage from "./components/ChangeTabFromStorage";
-import ModalWin from "./components/ModalWin";
 import RenderHeader from "./components/RenderHeader";
 import ScrollToTop from "./components/ScrollToTop";
 
@@ -23,15 +21,15 @@ class MainPage extends Component {
     super(props);
 
     this.state = {
-      openAddContainer: false,  // открытие страницы добавления закладок
-      constTabs: [],            // начальный массив закладок
-      newTabs: [],              // отсортированный массив закладок
-      value: "",                // значение тегов, по которым идет поиск
-      tabForChange: {},         //  закладка для изменения
+      openAddContainer: false, // открытие страницы добавления закладок
+      constTabs: [], // начальный массив закладок
+      newTabs: [], // отсортированный массив закладок
+      value: "", // значение тегов, по которым идет поиск
+      tabForChange: {}, //  закладка для изменения
       tegValue: [],
-      superNewTabs:[],
-      newTegsTabs:[],
-      // selectedTegs: true,
+      superNewTabs: [],
+      newTegsTabs: [],
+      pageChange: false
     };
 
     this.clickOnButton = this.clickOnButton.bind(this);
@@ -64,7 +62,7 @@ class MainPage extends Component {
         if (this.state.constTabs.length) {
           this.setState({
             superNewTabs: this.state.constTabs,
-            newTabs: this.state.constTabs,
+            newTabs: this.state.constTabs
           });
         }
       }
@@ -72,70 +70,70 @@ class MainPage extends Component {
   }
 
   clickOnButton() {
-    this.setState({ openAddContainer: false }, () => this.loadData());
+    this.setState({ openAddContainer: false, pageChange: false }, () =>
+      this.loadData()
+    );
   }
 
   openAddTabsContainer() {
     this.setState({ openAddContainer: true });
   }
 
-
   searchInputTabs(event) {
-    this.setState({ value: event.target.value }, () =>
-      this.searchTabs()
-    );
+    this.setState({ value: event.target.value }, () => this.searchTabs());
   }
 
   searchByTeg(event) {
     // this.setState({selectedTegs: true});
     let index = arrayTegSearch.findIndex(item => item === event.target.id);
-    if(index !== -1) {
-      arrayTegSearch.splice(index,1);
+    if (index !== -1) {
+      arrayTegSearch.splice(index, 1);
     } else {
       arrayTegSearch.push(event.target.id);
     }
     this.setState({ tegValue: arrayTegSearch }, () =>
-        // this.searchTabs()
-        this.searchTabs()
+      // this.searchTabs()
+      this.searchTabs()
     );
   }
 
-
   // поиск по инпуту
   searchTabs(value, tegValue) {
-
     let arr = [];
-    sortArray=this.state.constTabs;
+    sortArray = this.state.constTabs;
 
-    if(this.state.value.length){
+    if (this.state.value.length) {
       sortArray = this.state.newTabs;
     }
 
     arr = sortArray.filter(tab => {
-      return tab.nameTabs.toLowerCase().includes(this.state.value.toLowerCase());
+      return tab.nameTabs
+        .toLowerCase()
+        .includes(this.state.value.toLowerCase());
     });
-
 
     this.setState({ newTabs: arr }, () => this.searchTabsByTeg());
   }
-
-
-
 
   // поиск по тегам
   searchTabsByTeg(tegValue, value) {
     let arr = [];
     sortArray = this.state.constTabs;
 
-    if(this.state.value.length){
-        sortArray = this.state.newTabs;
-      }
+    if (this.state.value.length) {
+      sortArray = this.state.newTabs;
+    }
 
+    arr = sortArray.filter(tag =>
+      tag.tegs.some(teg =>
+        this.state.tegValue.some(item => item === teg.name.toLowerCase())
+      )
+    );
 
-    arr = sortArray.filter(tag => tag.tegs.some(teg => this.state.tegValue.some(item =>  item === teg.name.toLowerCase())
-    ));
-
-    this.setState({ newTegsTabs: arr.length ? arr : this.state.newTabs, superNewTabs: arr.length ? arr : this.state.newTabs });
+    this.setState({
+      newTegsTabs: arr.length ? arr : this.state.newTabs,
+      superNewTabs: arr.length ? arr : this.state.newTabs
+    });
   }
 
   // tagsForRender(input, teg){
@@ -157,101 +155,105 @@ class MainPage extends Component {
   //
   // }
 
-  finishSearchTegs(){
-    arrayTegSearch =[];
-    this.setState({superNewTabs: this.state.constTabs,})
+  finishSearchTegs() {
+    arrayTegSearch = [];
+    this.setState({ superNewTabs: this.state.constTabs });
   }
 
-// удалить закладку
+  // удалить закладку
   deleteTab(id) {
     DeleteTabFromStorage(this.state.constTabs, id, this.loadData);
   }
 
-// изменить закладку
+  // изменить закладку
   changeTab(id) {
     this.setState({
-      tabForChange: ChangeTabFromStorage(this.state.constTabs, id)
+      tabForChange: ChangeTabFromStorage(this.state.constTabs, id),
+      pageChange: true
     });
   }
 
   render() {
     return (
       <React.Fragment>
-        <span className="scroll" onClick={()=>ScrollToTop()} title="На вверх"/>
+        <span
+          className="scroll"
+          onClick={() => ScrollToTop()}
+          title="На вверх"
+        />
         <RenderHeader
-        mainPage={this.state.openAddContainer}
-        changePage={!!Object.keys(this.state.tabForChange).length}
-        countTabs={this.state.constTabs.length}
+          mainPage={this.state.openAddContainer}
+          changePage={this.state.pageChange}
+          countTabs={this.state.constTabs.length}
+          isOpen={!this.state.openAddContainer}
+          goMain={this.clickOnButton}
         />
 
-        {!this.state.openAddContainer &&
-          !Object.keys(this.state.tabForChange).length && (
-            <React.Fragment>
-              <section className="main_button-section">
-                <Button
-                  label="Главная"
-                  onClick={this.clickOnButton}
-                  className="first_button btn btn-primary"
-                />
-                <Button
-                  label="Создать закладку"
-                  onClick={this.openAddTabsContainer}
-                  className="btn btn-light"
-                />
-              </section>
+        {!this.state.openAddContainer && !this.state.pageChange && (
+          <React.Fragment>
+            <section className="main_button-section">
+              {/*<Button*/}
+              {/*  label="Главная"*/}
+              {/*  onClick={this.clickOnButton}*/}
+              {/*  className="first_button btn btn-primary"*/}
+              {/*/>*/}
+              <Button
+                label="Создать закладку"
+                onClick={this.openAddTabsContainer}
+                className="btn btn-light"
+              />
+            </section>
 
-              <section className="main_input-section">
-                <Input
-                  name={"search"}
-                  placeholder="Поиск закладдок по названию"
-                  type="search"
-                  value={this.state.value}
-                  onChange={this.searchInputTabs}
-                />
-              </section>
-              {this.state.constTabs.length &&
-                !Object.keys(this.state.tabForChange).length && (
-                  <React.Fragment>
-                    <section className="main_tegs">
-                      <ShowTegs
-                        tegs={this.state.tegs}
-                        onClick={this.searchByTeg}
-                        // selectedTegs={this.state.selectedTegs}
-                      />
-                      {/*<span*/}
-                      {/*  className="main_tegs_close"*/}
-                      {/*  onClick={() => this.finishSearchTegs()}*/}
-                      {/*  title="Сбросить поиск по тегам"*/}
-                      {/*/>*/}
-                    </section>
+            <section className="main_input-section">
+              <Input
+                name={"search"}
+                placeholder="Поиск закладдок по названию"
+                type="search"
+                value={this.state.value}
+                onChange={this.searchInputTabs}
+              />
+            </section>
+            {this.state.constTabs.length && !this.state.pageChange && (
+              <React.Fragment>
+                <section className="main_tegs">
+                  <ShowTegs
+                    tegs={this.state.tegs}
+                    onClick={this.searchByTeg}
+                    // selectedTegs={this.state.selectedTegs}
+                  />
+                  {/*<span*/}
+                  {/*  className="main_tegs_close"*/}
+                  {/*  onClick={() => this.finishSearchTegs()}*/}
+                  {/*  title="Сбросить поиск по тегам"*/}
+                  {/*/>*/}
+                </section>
 
-                    <div>
-                      <ShowTabs
-                        tabs={this.state.superNewTabs}
-                        deleteTab={this.deleteTab}
-                        changeTab={this.changeTab}
-                      />
-                    </div>
-                  </React.Fragment>
-                )}
-            </React.Fragment>
-          )}
+                <div>
+                  <ShowTabs
+                    tabs={this.state.superNewTabs}
+                    deleteTab={this.deleteTab}
+                    changeTab={this.changeTab}
+                  />
+                </div>
+              </React.Fragment>
+            )}
+          </React.Fragment>
+        )}
 
-        {this.state.openAddContainer &&
-          !Object.keys(this.state.tabForChange).length && (
-            <div className="row wrapper">
-              <div className="col-md-6">
-                <AddTabsContainer
-                  returnToMainPage={this.clickOnButton}
-                  tabs={this.state.constTabs}
-                  tegs={this.state.tegs}
-                  change={false}
-                />
-              </div>
+        {this.state.openAddContainer && !this.state.pageChange && (
+          <div className="row wrapper">
+            <div className="col-md-6">
+              <AddTabsContainer
+                returnToMainPage={this.clickOnButton}
+                tabs={this.state.constTabs}
+                tegs={this.state.tegs}
+                change={false}
+              />
             </div>
-          )}
+          </div>
+        )}
 
-        {!!Object.keys(this.state.tabForChange).length && (
+        {this.state.pageChange && (
           <div className="row wrapper">
             <div className="col-md-6">
               <AddTabsContainer
